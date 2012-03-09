@@ -1,0 +1,50 @@
+{% load sekizai_tags l10n %}
+
+{% addtoblock "js" %}<script src="{{ STATIC_URL }}wax/ext/modestmaps.min.js"></script>{% endaddtoblock %}
+{% addtoblock "js" %}<script src="{{ STATIC_URL }}wax/dist/wax.mm.js"></script>{% endaddtoblock %}
+{% addtoblock "css" %}<link href="{{ STATIC_URL }}wax/theme/controls.css" rel="stylesheet" type="text/css"/>{% endaddtoblock %}
+
+{% addtoblock "js" %}
+<script type="text/javascript">
+$(document).ready(function() {
+var tilejson = {
+  tilejson: '1.0.0',
+  scheme: 'xyz',
+  tiles: ['http://a.tiles.mapbox.com/mapbox/2.0.0/mapbox.world-bright/{Z}/{X}/{Y}.png']
+};
+
+var url = 'http://api.tiles.mapbox.com/v3/mapbox.world-light.jsonp';
+// Alias com.modestmaps to mm. This isn't necessary -
+// just nice for shorter code.
+var mm = com.modestmaps;
+/*
+var provider = new mm.TemplatedMapProvider(tilejson.tiles[0]);
+var m = mm.Map('modestmaps-setup', provider);
+m.setZoom(2);
+*/
+/*
+wax.tilejson(url, function(tilejson) {
+  // Set up a map in a div with the id 'modestmaps-setup'
+  var m = new mm.Map('modestmaps-setup',
+    // Use Wax's connector to add a new custom layer
+    new wax.mm.connector(tilejson),
+    // And it'll be 240px by 120px
+    new mm.Point(240,120));
+
+  // Center it on the United States, at zoom level 2.
+  m.setCenterZoom(new mm.Location(39, -98), 2);
+  });
+*/
+  //var template = ;
+  var template = tilejson.tiles[0];
+  var provider = new com.modestmaps.TemplatedMapProvider(template);
+  var map = new com.modestmaps.Map('modestmaps-setup', provider);
+  map.setCenter(new mm.Location({{ instance.lat|unlocalize }}, {{ instance.lng|unlocalize }}));
+  map.setZoom({{ instance.zoom|unlocalize }});
+});
+</script>
+{% endaddtoblock %}
+
+<div id="modestmaps-setup" style="height: 300px; width: 100%; max-width: 400px;">
+OpenLayers
+</div>
